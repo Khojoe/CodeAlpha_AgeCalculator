@@ -1,0 +1,325 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --ink: #1a1208;
+  --paper: #f5f0e8;
+  --cream: #ede7d6;
+  --gold: #c9963a;
+  --gold-light: #e8bf7a;
+  --rust: #8b3a1a;
+  --shadow: rgba(26, 18, 8, 0.15);
+}
+
+body {
+  min-height: 100vh;
+  background: var(--paper);
+  background-image:
+    radial-gradient(
+      ellipse at 20% 20%,
+      rgba(201, 150, 58, 0.08) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse at 80% 80%,
+      rgba(139, 58, 26, 0.06) 0%,
+      transparent 50%
+    ),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Crect width='4' height='4' fill='%23f5f0e8'/%3E%3Ccircle cx='1' cy='1' r='0.5' fill='rgba(26,18,8,0.04)'/%3E%3C/svg%3E");
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: "DM Mono", monospace;
+  padding: 2rem 1rem;
+  color: var(--ink);
+}
+
+.wrapper {
+  width: 100%;
+  max-width: 520px;
+  animation: fadeUp 0.7s ease both;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Header ── */
+.header {
+  text-align: center;
+  margin-bottom: 2.4rem;
+}
+.header .eyebrow {
+  font-size: 0.65rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 0.5rem;
+}
+.header h1 {
+  font-family: "Playfair Display", serif;
+  font-size: clamp(2rem, 6vw, 2.8rem);
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--ink);
+}
+.header h1 em {
+  font-style: italic;
+  color: var(--rust);
+}
+.divider {
+  margin: 1rem auto 0;
+  width: 48px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+
+/* ── Card ── */
+.card {
+  background: #fff;
+  border: 1px solid rgba(201, 150, 58, 0.25);
+  border-radius: 4px;
+  padding: 2.2rem 2.4rem;
+  box-shadow:
+    0 2px 6px var(--shadow),
+    0 12px 40px rgba(26, 18, 8, 0.07);
+  position: relative;
+  overflow: hidden;
+}
+.card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--rust), var(--gold), var(--rust));
+}
+
+/* ── Input row ── */
+.input-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1.4fr;
+  gap: 0.9rem;
+  margin-bottom: 1.6rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+label {
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+input[type="number"] {
+  width: 100%;
+  padding: 0.65rem 0.8rem;
+  background: var(--cream);
+  border: 1px solid rgba(201, 150, 58, 0.3);
+  border-radius: 3px;
+  font-family: "DM Mono", monospace;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--ink);
+  outline: none;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+input[type="number"]:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(201, 150, 58, 0.12);
+}
+input.error {
+  border-color: var(--rust) !important;
+}
+
+/* ── Error message ── */
+.error-msg {
+  font-size: 0.72rem;
+  color: var(--rust);
+  min-height: 1.1em;
+  margin-bottom: 1rem;
+  margin-top: -0.6rem;
+  transition: opacity 0.2s;
+}
+
+/* ── Button ── */
+button {
+  width: 100%;
+  padding: 0.9rem;
+  background: var(--ink);
+  color: var(--gold-light);
+  border: none;
+  border-radius: 3px;
+  font-family: "DM Mono", monospace;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    transform 0.1s,
+    box-shadow 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+button::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.05) 0%,
+    transparent 100%
+  );
+}
+button:hover {
+  background: #2e2010;
+  box-shadow: 0 4px 16px rgba(26, 18, 8, 0.2);
+}
+button:active {
+  transform: translateY(1px);
+}
+
+/* ── Result ── */
+.result {
+  margin-top: 1.8rem;
+  border-top: 1px solid rgba(201, 150, 58, 0.2);
+  padding-top: 1.6rem;
+  display: none;
+  animation: revealResult 0.5s ease both;
+}
+.result.show {
+  display: block;
+}
+
+@keyframes revealResult {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.result-label {
+  font-size: 0.6rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--gold);
+  text-align: center;
+  margin-bottom: 1.1rem;
+}
+
+.result-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.8rem;
+}
+
+.result-block {
+  background: var(--cream);
+  border: 1px solid rgba(201, 150, 58, 0.18);
+  border-radius: 3px;
+  padding: 1rem 0.5rem 0.8rem;
+  text-align: center;
+}
+
+.result-block .num {
+  font-family: "Playfair Display", serif;
+  font-size: clamp(1.8rem, 5vw, 2.4rem);
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1;
+  display: block;
+  counter-reset: none;
+}
+.result-block .num.counting {
+  animation: countUp 0.4s ease both;
+}
+@keyframes countUp {
+  from {
+    transform: translateY(6px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.result-block .unit {
+  display: block;
+  font-size: 0.58rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-top: 0.35rem;
+}
+
+/* birthday banner */
+.birthday-banner {
+  margin-top: 1.2rem;
+  padding: 0.65rem 1rem;
+  background: linear-gradient(135deg, #fffbe8, #fff8e0);
+  border: 1px solid rgba(201, 150, 58, 0.35);
+  border-radius: 3px;
+  text-align: center;
+  font-size: 0.72rem;
+  color: var(--rust);
+  letter-spacing: 0.05em;
+  display: none;
+}
+.birthday-banner.show {
+  display: block;
+  animation: revealResult 0.4s 0.3s ease both;
+  opacity: 0;
+  animation-fill-mode: both;
+}
+
+/* ── Footer ── */
+.footer {
+  text-align: center;
+  margin-top: 1.6rem;
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(26, 18, 8, 0.3);
+}
+.footer a {
+  color: var(--gold);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.footer a:hover {
+  color: var(--rust);
+}
