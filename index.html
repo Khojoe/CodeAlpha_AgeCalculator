@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Age Calculator</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@300;400;500&display=swap"
+    rel="stylesheet" />
+
+</head>
+
+<body>
+
+  <div class="wrapper">
+
+    <div class="header">
+      <p class="eyebrow">Calculate</p>
+      <h1>How <em>old</em><br>are you?</h1>
+      <div class="divider"></div>
+    </div>
+
+    <div class="card">
+      <div class="input-row">
+        <div class="field">
+          <label for="day">Day</label>
+          <input type="number" id="day" placeholder="DD" min="1" max="31" />
+        </div>
+        <div class="field">
+          <label for="month">Month</label>
+          <input type="number" id="month" placeholder="MM" min="1" max="12" />
+        </div>
+        <div class="field">
+          <label for="year">Year</label>
+          <input type="number" id="year" placeholder="YYYY" min="1900" max="2099" />
+        </div>
+      </div>
+
+      <p class="error-msg" id="error-msg"></p>
+
+      <button onclick="calculate()">Calculate My Age</button>
+
+      <div class="result" id="result">
+        <p class="result-label">Your age is</p>
+        <div class="result-grid">
+          <div class="result-block">
+            <span class="num" id="res-years">—</span>
+            <span class="unit">Years</span>
+          </div>
+          <div class="result-block">
+            <span class="num" id="res-months">—</span>
+            <span class="unit">Months</span>
+          </div>
+          <div class="result-block">
+            <span class="num" id="res-days">—</span>
+            <span class="unit">Days</span>
+          </div>
+        </div>
+        <div class="birthday-banner" id="bday-banner">🎂 Happy Birthday! It's your special day today.</div>
+      </div>
+    </div>
+
+    <p class="footer">Built for <a href="https://www.codealpha.tech" target="_blank">codealpha.tech</a></p>
+
+  </div>
+
+  <script>
+    // ── Helpers ──────────────────────────────────────────────────────────────
+
+    function daysInMonth(month, year) {
+      return new Date(year, month, 0).getDate(); // month is 1-based here
+    }
+
+    function animateNum(el, value) {
+      el.classList.remove('counting');
+      void el.offsetWidth; // reflow
+      el.textContent = value;
+      el.classList.add('counting');
+    }
+
+    // ── Validation ───────────────────────────────────────────────────────────
+
+    function validate(day, month, year) {
+      const dayEl = document.getElementById('day');
+      const monthEl = document.getElementById('month');
+      const yearEl = document.getElementById('year');
+
+      [dayEl, monthEl, yearEl].forEach(el => el.classList.remove('error'));
+
+      if (!day || !month || !year) {
+        if (!day) dayEl.classList.add('error');
+        if (!month) monthEl.classList.add('error');
+        if (!year) yearEl.classList.add('error');
+        return 'Please fill in all three fields.';
+      }
+
+      if (month < 1 || month > 12) {
+        monthEl.classList.add('error');
+        return 'Month must be between 1 and 12.';
+      }
+
+      const maxDay = daysInMonth(month, year);
+      if (day < 1 || day > maxDay) {
+        dayEl.classList.add('error');
+        return `Day must be between 1 and ${maxDay} for that month.`;
+      }
+
+      const today = new Date();
+      const dob = new Date(year, month - 1, day);
+
+      if (year < 1900 || year > today.getFullYear()) {
+        yearEl.classList.add('error');
+        return `Year must be between 1900 and ${today.getFullYear()}.`;
+      }
+
+      if (dob > today) {
+        dayEl.classList.add('error');
+        monthEl.classList.add('error');
+        yearEl.classList.add('error');
+        return 'Date of birth cannot be in the future.';
+      }
+
+      return null; // no error
+    }
+
+    // ── Calculation ──────────────────────────────────────────────────────────
+
+    function calculate() {
+      const day = parseInt(document.getElementById('day').value);
+      const month = parseInt(document.getElementById('month').value);
+      const year = parseInt(document.getElementById('year').value);
+
+      const errorEl = document.getElementById('error-msg');
+      const resultEl = document.getElementById('result');
+
+      const err = validate(day, month, year);
+      if (err) {
+        errorEl.textContent = err;
+        resultEl.classList.remove('show');
+        return;
+      }
+
+      errorEl.textContent = '';
+
+      const today = new Date();
+      let tY = today.getFullYear(), tM = today.getMonth() + 1, tD = today.getDate();
+      let bY = year, bM = month, bD = day;
+
+      // Calculate difference
+      let years = tY - bY;
+      let months = tM - bM;
+      let days = tD - bD;
+
+      if (days < 0) {
+        months--;
+        days += daysInMonth(tM - 1 === 0 ? 12 : tM - 1, tM - 1 === 0 ? tY - 1 : tY);
+      }
+      if (months < 0) {
+        years--;
+        months += 12;
+      }
+
+      // Show result
+      resultEl.classList.remove('show');
+      void resultEl.offsetWidth;
+      resultEl.classList.add('show');
+
+      animateNum(document.getElementById('res-years'), years);
+      animateNum(document.getElementById('res-months'), months);
+      animateNum(document.getElementById('res-days'), days);
+
+      // Birthday check
+      const bdayBanner = document.getElementById('bday-banner');
+      if (tM === bM && tD === bD) {
+        bdayBanner.classList.add('show');
+      } else {
+        bdayBanner.classList.remove('show');
+      }
+    }
+
+    // Allow Enter key
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Enter') calculate();
+    });
+  </script>
+</body>
+
+</html>
