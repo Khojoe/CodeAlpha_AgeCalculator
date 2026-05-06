@@ -4,37 +4,39 @@ function daysInMonth(month, year) {
   return new Date(year, month, 0).getDate(); // month is 1-based here
 }
 
-function animateNum(el, value) {
-  el.classList.remove("counting");
-  void el.offsetWidth; // reflow
-  el.textContent = value;
-  el.classList.add("counting");
+function animateNum(elem, value) {
+  elem.classList.remove("counting");
+  void elem.offsetWidth; // reflow
+  elem.textContent = value;
+  elem.classList.add("counting");
 }
 
 // ── Validation ───────────────────────────────────────────────────────────
 
 function validate(day, month, year) {
-  const dayEl = document.getElementById("day");
-  const monthEl = document.getElementById("month");
-  const yearEl = document.getElementById("year");
+  const dayElem = document.getElementById("day");
+  const monthElem = document.getElementById("month");
+  const yearElem = document.getElementById("year");
 
-  [dayEl, monthEl, yearEl].forEach((el) => el.classList.remove("error"));
+  [dayElem, monthElem, yearElem].forEach((elem) =>
+    elem.classList.remove("error"),
+  );
 
   if (!day || !month || !year) {
-    if (!day) dayEl.classList.add("error");
-    if (!month) monthEl.classList.add("error");
-    if (!year) yearEl.classList.add("error");
+    if (!day) dayElem.classList.add("error");
+    if (!month) monthElem.classList.add("error");
+    if (!year) yearElem.classList.add("error");
     return "Please fill in all three fields.";
   }
 
   if (month < 1 || month > 12) {
-    monthEl.classList.add("error");
+    monthElem.classList.add("error");
     return "Month must be between 1 and 12.";
   }
 
   const maxDay = daysInMonth(month, year);
   if (day < 1 || day > maxDay) {
-    dayEl.classList.add("error");
+    dayElem.classList.add("error");
     return `Day must be between 1 and ${maxDay} for that month.`;
   }
 
@@ -42,14 +44,14 @@ function validate(day, month, year) {
   const dob = new Date(year, month - 1, day);
 
   if (year < 1900 || year > today.getFullYear()) {
-    yearEl.classList.add("error");
+    yearElem.classList.add("error");
     return `Year must be between 1900 and ${today.getFullYear()}.`;
   }
 
   if (dob > today) {
-    dayEl.classList.add("error");
-    monthEl.classList.add("error");
-    yearEl.classList.add("error");
+    dayElem.classList.add("error");
+    monthElem.classList.add("error");
+    yearElem.classList.add("error");
     return "Date of birth cannot be in the future.";
   }
 
@@ -76,21 +78,24 @@ function calculate() {
   errorEl.textContent = "";
 
   const today = new Date();
-  let tY = today.getFullYear(),
-    tM = today.getMonth() + 1,
-    tD = today.getDate();
-  let bY = year,
-    bM = month,
-    bD = day;
+  let todayYear = today.getFullYear(),
+    todayMonth = today.getMonth() + 1,
+    todayDay = today.getDate();
+  let birthYear = year,
+    birthMonth = month,
+    birthDay = day;
 
   // Calculate difference
-  let years = tY - bY;
-  let months = tM - bM;
-  let days = tD - bD;
+  let years = todayYear - birthYear;
+  let months = todayMonth - birthMonth;
+  let days = todayDay - birthDay;
 
   if (days < 0) {
     months--;
-    days += daysInMonth(tM - 1 === 0 ? 12 : tM - 1, tM - 1 === 0 ? tY - 1 : tY);
+    days += daysInMonth(
+      todayMonth - 1 === 0 ? 12 : todayMonth - 1,
+      todayMonth - 1 === 0 ? todayYear - 1 : todayYear,
+    );
   }
   if (months < 0) {
     years--;
@@ -107,15 +112,15 @@ function calculate() {
   animateNum(document.getElementById("res-days"), days);
 
   // Birthday check
-  const bdayBanner = document.getElementById("bday-banner");
-  if (tM === bM && tD === bD) {
-    bdayBanner.classList.add("show");
+  const birthdayBanner = document.getElementById("birthday-banner");
+  if (todayMonth === birthMonth && todayDay === birthDay) {
+    birthdayBanner.classList.add("show");
   } else {
-    bdayBanner.classList.remove("show");
+    birthdayBanner.classList.remove("show");
   }
 }
 
 // Allow Enter key
-document.addEventListener("keydown", (e) => {
-  if (e.key === "Enter") calculate();
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") calculate();
 });
